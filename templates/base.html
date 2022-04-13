@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Suez+One&display=swap" rel="stylesheet">
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"/>
+	<meta name="Description" content="Author: max mcguigan, Content: A dictionary to convert maori words to english.">
+</head>
+
+<body>
+	<div id="container">
+		<header>
+			<h1>{% block heading %}{% endblock %}</h1>
+		</header>
+		<nav>
+			<a href="/">Home</a>
+			<a href="/dictionary/all">Dictionary</a>
+			{% if logged_in %}
+			<a href="/add">Contribute</a>
+			<a href="/logout">Log out</a>
+			{% else %}
+			<a href="/signup">Sign up</a>
+			<a href="/login">Log in</a>
+			{% endif %}
+		</nav>
+		<div class="login-display">
+			{% if logged_in %}
+			<p class="login-display">logged in as {{ first_name }}</p>
+			{% else %}
+			<p class="login-display">not logged in</p>
+			{% endif %}
+		</div>
+
+		<main>
+            {% block main%}{% endblock %}
+        </main>
+	</div>
+</body>
+	<footer>
+		<p>&copy; max mcguigan 2022</p>
+	</footer>
+</html>
