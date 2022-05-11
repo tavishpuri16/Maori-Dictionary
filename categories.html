@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{%block tabheader%} Categories {% endblock %}
+{%block pageheader%} Categories {% endblock %}
+
+{% block main %}
+<div id="categories">
+{% for categories in categories %}
+        <div class = "product-box">
+            <h3> {{ categories[0] }}</h3>
+        </div>
+
+        {% endfor %}
+</div>
+{% endblock %}

@@ -42,7 +42,7 @@ def render_menu_page():
     product_list = cur.fetchall()
     con.close()
 
-    return render_template("menu.html", products=product_list, logged_in=is_logged_in())
+    return render_template("menu.html", products=product_list, logged_in = is_logged_in())
 
 
 @app.route('/contact')
@@ -130,26 +130,15 @@ def render_dictionary():
     con.close()
     return render_template("dictionary.html", words = words_list, logged_in = is_logged_in())
 
-@app.route('/addtocart/<productid>')
-def addtocart(productid):
-    try:
-        productid = int(productid)
-    except ValueError:
-        print("{} is not an integer".format(productid))
-        return redirect("/menu?error=Invalid+product+id")
-
-    userid = session['userid']
-    timestamp = datetime.now()
-    print("User {} would like to add {} to cart at {}".format(userid, productid, timestamp))
-
-    query = "INSERT INTO cart(id,userid,productid,timestamp) Values (NULL,?,?,?)"
+@app.route('/categories')
+def render_categories():
     con = create_connection(DB_NAME)
+    query = "SELECT category, id FROM categories"
     cur = con.cursor()
-    cur.execute(query, (userid, productid, timestamp))
-    con.commit()
+    cur.execute(query)
+    categories_list = cur.fetchall()
     con.close()
-    return redirect(request.referrer)
-
+    return render_template("categories.html", categories = categories_list, logged_in = is_logged_in())
 
 def is_logged_in():
     if session.get('email') is None:
