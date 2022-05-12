@@ -23,8 +23,15 @@
 			<ul>
                 <li><a href="\">Home</a></li>
 				<li><a href="\login">Login</a></li>
-				<li><a href="\categories">Categories</a></li>
 				<li><a href="\dictionary">Dictionary</a></li>
+				<div id="categories">
+					{% for categories in categories %}
+					<div class = "product-box">
+						<ul><a href = '/dictionary'>{{ categories[0] }}</a></ul>
+        		</div>
+
+        {% endfor %}
+</div>
 
 			</ul>
 		</nav>

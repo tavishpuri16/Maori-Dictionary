@@ -15,7 +15,6 @@ app.secret_key = "secret_key"
 # inputs: database file
 # outputs: the connection to the db or none.
 def create_connection(db_file):
-    """ create a connection to the sqlite db"""
     try:
         connection = sqlite3.connect(db_file)
         return connection
@@ -27,7 +26,24 @@ def create_connection(db_file):
 
 @app.route('/')
 def render_homepage():
-    return render_template("home.html", logged_in=is_logged_in())
+    con = create_connection(DB_NAME)
+    query = "SELECT category, id FROM categories"
+    cur = con.cursor()
+    cur.execute(query)
+    categories_list = cur.fetchall()
+    con.close()
+    return render_template("home.html", logged_in=is_logged_in(), category=categories_list)
+
+@app.route('/teacher')
+def render_teacher():
+    con = create_connection(DB_NAME)
+    query = "SELECT category, id FROM categories"
+    cur = con.cursor()
+    cur.execute(query)
+    categories_list = cur.fetchall()
+    con.close()
+    return render_template("teacher.html", logged_in=is_logged_in(), category=categories_list)
+
 
 
 @app.route('/menu')
@@ -70,8 +86,8 @@ def render_login_page():
             userid = user_data[0][0]
             firstname = user_data[0][1]
             db_password = user_data[0][2]
-        except IndexError:
-            return redirect("/login?error=Email+invalid+or+password+incorrect")
+        except IndexError:2
+        return redirect("/login?error=Email+invalid+or+password+incorrect")
 
         if not bcrypt.check_password_hash(db_password, password):
             return redirect(request.referrer + "?error=Email+invalid+or+password+incorrect")
@@ -86,6 +102,12 @@ def render_login_page():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def render_signup_page():
+    con = create_connection(DB_NAME)
+    query = "SELECT category, id FROM categories"
+    cur = con.cursor()
+    cur.execute(query)
+    categories_list = cur.fetchall()
+    con.close()
     if is_logged_in():
         return redirect('/')
 
@@ -129,6 +151,7 @@ def render_dictionary():
     words_list = cur.fetchall()
     con.close()
     return render_template("dictionary.html", words = words_list, logged_in = is_logged_in())
+
 
 @app.route('/categories')
 def render_categories():
