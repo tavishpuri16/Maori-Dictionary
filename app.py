@@ -122,16 +122,6 @@ def render_signup_page():
     return render_template("signup.html", logged_in=is_logged_in, categories =categories_list())
 
 
-@app.route('/dictionary')
-def render_dictionary():
-    con = create_connection(DB_NAME)
-    query = "SELECT english, maori, level, added_by, definition, image, id FROM words"
-    cur = con.cursor()
-    cur.execute(query)
-    words_list = cur.fetchall()
-    con.close()
-    return render_template("dictionary.html", words = words_list, logged_in = is_logged_in())
-
 
 @app.route('/categories')
 def render_categories():
