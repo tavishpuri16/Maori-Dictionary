@@ -32,7 +32,7 @@ def render_homepage():
     cur.execute(query)
     categories_list = cur.fetchall()
     con.close()
-    return render_template("home.html", logged_in=is_logged_in(), category=categories_list)
+    return render_template("home.html", logged_in=is_logged_in(), categories=categories_list)
 
 @app.route('/teacher')
 def render_teacher():
@@ -44,26 +44,6 @@ def render_teacher():
     con.close()
     return render_template("teacher.html", logged_in=is_logged_in(), category=categories_list)
 
-
-
-@app.route('/menu')
-@app.route('/menu/<products>')
-def render_menu_page():
-    con = create_connection(DB_NAME)
-
-    query = "SELECT name, description, volume, price, image FROM product"
-
-    cur = con.cursor()
-    cur.execute(query)
-    product_list = cur.fetchall()
-    con.close()
-
-    return render_template("menu.html", products=product_list, logged_in = is_logged_in())
-
-
-@app.route('/contact')
-def render_contact():
-    return render_template("contact.html", logged_in=is_logged_in())
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -139,7 +119,7 @@ def render_signup_page():
         con.commit()
         con.close()
         return redirect('/login')
-    return render_template("signup.html", logged_in=is_logged_in())
+    return render_template("signup.html", logged_in=is_logged_in, categories =categories_list())
 
 
 @app.route('/dictionary')
