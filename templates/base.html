@@ -16,18 +16,24 @@
 		</header>
 
 		<nav>
+            {% if logged_in %}
+                <a href="/logout">Log out</a>
+            {% else %}
+                <a href="/login">Log in</a>
+            {% endif %}
             <input type="checkbox" name="drop_down_menu" />
 			<span></span>
 			<span></span>
 			<span></span>
 			<ul>
                 <li><a href="\">Home</a></li>
-				<li><a href="\login">Login</a></li>
 					<div id="categories">
 						{% for categories in categories %}
 						<div class = "product-box">
-							<ul><a href = '/categories'>{{ categories[0] }}</a></ul>
+							<li><a href = '/categories'>{{ categories[0] }}</a></li>
         				</div>
+
+
 
         			{% endfor %}
 					</div>
@@ -43,6 +49,7 @@
 		-->
 
 		<main>
+
             {% block main%}{% endblock %}
         </main>
 
