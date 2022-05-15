@@ -27,11 +27,14 @@
 			<span></span>
 			<ul>
                 <li><a href="\">Home</a></li>
-					<div id="categories">
-						{% for categories in categories %}
-						<div class = "product-box">
-							<li><a href = '/categories'>{{ categories[0] }}</a></li>
-        				</div>
+				{% if logged_in %}
+                	<li><a href="/edit">Add Category</a></li>
+            	{% endif %}
+				<div id="categories">
+					{% for categories in categories %}
+					<div class = "product-box">
+						<li><a href = '/categories'>{{ categories[0] }}</a></li>
+					</div>
 
 
 
