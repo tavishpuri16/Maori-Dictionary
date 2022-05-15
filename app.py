@@ -112,15 +112,22 @@ def render_signup_page():
 
     return render_template('signup.html', logged_in=is_logged_in())
 
-@app.route('/words')
-def render_words():
+@app.route('/words/<categoryid>')
+def render_words(categoryid):
     con = create_connection(DB_NAME)
     query = "SELECT english, maori, level, added_by, definition, image, id FROM words"
     cur = con.cursor()
     cur.execute(query)
     words_list = cur.fetchall()
     con.close()
+
+    # if words_list is empty - render addnewword
     return render_template("words.html", words = words_list, logged_in = is_logged_in())
+
+@app.route('/new_word')
+def render_new_word():
+    return render_template('new_word.html')
+
 
 @app.route('/categories')
 def render_categories():
