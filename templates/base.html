@@ -33,7 +33,7 @@
 				<div id="categories">
 					{% for categories in categories %}
 					<div class = "product-box">
-						<li><a href = '/categories'>{{ categories[0] }}</a></li>
+						<li><a href = '/words'>{{ categories[0] }}</a></li>
 					</div>
 
 
@@ -43,14 +43,6 @@
 
 			</ul>
 		</nav>
-
-
-		<!--
-		=====================================================
-		== Content row of the template.                 ==
-		=====================================================
-		-->
-
 		<main>
 
             {% block main%}{% endblock %}

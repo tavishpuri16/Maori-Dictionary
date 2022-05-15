@@ -27,12 +27,12 @@ def create_connection(db_file):
 @app.route('/')
 def render_homepage():
     con = create_connection(DB_NAME)
-    query = "SELECT category, id FROM categories"
+    query = "SELECT category, id FROM categories" #selects relevant info from the right table
     cur = con.cursor()
     cur.execute(query)
     categories_list = cur.fetchall()
     con.close()
-    return render_template("home.html", logged_in=is_logged_in(), categories=categories_list)
+    return render_template("home.html", logged_in=is_logged_in(), categories=categories_list) #displays the html
 
 @app.route('/teacher')
 def render_teacher():
@@ -50,7 +50,8 @@ def login():
     if is_logged_in():
         return redirect('/')
     if request.method == "POST":
-        email = request.form['email'].strip()
+        # .strip() ignores any leading or trailing spaces in the user input
+        email = request.form['email'].strip() #requests the right data from the form the user filled out - in this case the email
         password = request.form['password'].strip()
 
         query = """SELECT id, fname, password FROM users WHERE email = ?"""
@@ -64,7 +65,7 @@ def login():
             firstname = user_data[0][1]
             db_password = user_data[0][2]
         except IndexError:
-            return redirect('/login?error=email+invalid+or+password+incorrect')
+            return redirect('/login?error=email+invalid+or+password+incorrect') #if password not matching with corresponding email
 
         if not bcrypt.check_password_hash(db_password, password):
             return redirect(request.referrer + "?error=email+invalid+or+password+incorrect")
@@ -80,38 +81,46 @@ def login():
 @app.route('/signup', methods =['GET','POST'])
 def render_signup_page():
     if is_logged_in():
-        return redirect('/')
+        return redirect('/') #if logged in, redirect to home page
     if request.method == 'POST':
         print(request.form)
         # .strip() ignores any leading or trailing spaces in the user input
         fname = request.form.get('fname').strip().title() #title auto capitalises
         lname = request.form.get('lname').strip().title()
         email = request.form.get('email').strip().lower() #lower makes everything lower case
-        password = request.form.get('password')
-        password2 = request.form.get('password2')
+        password = request.form.get('pass')
+        password2 = request.form.get('pass2')
 
         if password != password2:
-            return redirect('/signup?error=Passwords+dont+match')
+            return redirect('/signup?error=Passwords+dont+match') #if passwords don't match, then error
 
-        hashed_password = bcrypt.generate_password_hash(password)
+        hashed_password = bcrypt.generate_password_hash(password) #generates an encrypted password for security
 
         con = create_connection(DB_NAME)
 
-        query = "INSERT INTO users(id,fname,lname,email,password) VALUES(NULL,?,?,?,?)"
+        query = "INSERT INTO users(id,fname,lname,email,password) VALUES(NULL,?,?,?,?)" #Inserts the user inputs into the users table
 
         cur = con.cursor()
         try:
             cur.execute(query,(fname,lname,email,hashed_password))
         except sqlite3.IntegrityError:
-            return redirect('signup?error=Email+is+already+used')
+            return redirect('signup?error=Email+is+already+used') #doesn't let same email sign up twice
         con.commit()
         con.close()
-        return redirect('/login')
+        return redirect('/login') #redirects to login page once signed up
 
 
     return render_template('signup.html', logged_in=is_logged_in())
 
-
+@app.route('/words')
+def render_words():
+    con = create_connection(DB_NAME)
+    query = "SELECT english, maori, level, added_by, definition, image, id FROM words"
+    cur = con.cursor()
+    cur.execute(query)
+    words_list = cur.fetchall()
+    con.close()
+    return render_template("words.html", words = words_list, logged_in = is_logged_in())
 
 @app.route('/categories')
 def render_categories():
@@ -123,14 +132,8 @@ def render_categories():
     con.close()
     return render_template("categories.html", categories = categories_list, logged_in = is_logged_in())
 
-@app.route('/words', methods = ['GET', 'POST'])
-def render_words():
-    if request.method == 'POST':
 
-        con = create_connection(DB_NAME)
-
-
-
+#adding option to add new categories
 @app.route('/edit', methods =['GET','POST'])
 def render_edit():
 
@@ -146,9 +149,9 @@ def render_edit():
 
         cur = con.cursor()
         try:
-            cur.execute(query, (category,))
+            cur.execute(query, (category,)) #the extra comma at the end makes it a tuple( takes words as opposed to characters)
         except sqlite3.IntegrityError:
-            return redirect('signup?error=Email+is+already+used')
+            return redirect('signup?error=category+is+already+used') #doesn't let same category be added twice
         con.commit()
         con.close()
     return render_template("edit.html", logged_in = is_logged_in())
