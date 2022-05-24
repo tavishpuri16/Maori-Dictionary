@@ -4,8 +4,8 @@
 	<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Suez+One&display=swap" rel="stylesheet">
-	<title>{% block title %}{% endblock %}</title>
-	<meta name="Description" content="Author: Tavish Puri, Content: A dictionary to convert maori words to english.">
+	<title>{% block title %} {% endblock %}</title>
+	<meta name="Description" content="Author: T Puri, Content: A dictionary to convert maori words to english.">
 </head>
 
 <body>
@@ -27,35 +27,42 @@
 			<span></span>
 			<ul>
                 <li><a href="\">Home</a></li>
-				{% if logged_in %}
-                	<li><a href="/edit">Add Category</a></li>
-            	{% endif %}
-				<div id="categories">
-					{% for categories in categories %}
-					<div class = "product-box">
-
-						<li><a href = "/words/{{categories[0]}}"> {{ categories[0]}}</a></li>
-					</div>
-
-
-
-        			{% endfor %}
-					</div>
+				<li><a href="\dictionary">Dictionary</a></li>
 
 			</ul>
 		</nav>
-		<main>
 
+
+		<!--
+		=====================================================
+		== Content row of the template.                 ==
+		=====================================================
+		-->
+
+		<main>
             {% block main%}{% endblock %}
         </main>
 
 
 		<footer>
 			<p>
-				&copy; Tavish's Maori Dictionary
+				&copy; Tavish's Maori Dictionary 2020
 			</p>
 		</footer>
 
 	</div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class = "button-group">
+    {% if logged_in %}
+    <a href = "/edit"> Add new words</a>
+    {% else %} <a href = "/login"> log in first</a>
+    {% endif %}
+</div>
+
+<form class = "myForm" method = "post">
+    {% if logged_in %}
+    <div class = "form_group">
+        <div class = "form_label" >which word to delete:</div>
+        <div class = "form_label" ><input id = "delete_word" name = "delete-word" type = "text" required></div>
+    </div>
+    <div class ="button_group">
+        <input type = "submit" value = "Delete">
+    </div>
+    {% else %} <a href = "/login">login first</a>
+    {% endif %}
+</form>
+
+<div id = "words">
+{% for words in words %}
+        <div class = "product-box">
+         <ul><a href = "/words/{{words[0] }}"> {{words [0]}}</a></ul>
+
+        </div>
+
+        {% endfor %}
+
+
+</div>
+{% endblock %}
+

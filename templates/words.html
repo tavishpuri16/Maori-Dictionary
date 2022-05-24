@@ -8,14 +8,14 @@
 <div id="words">
 {% for words in words %}
         <div class = "product-box">
-            <h3> {{ words[0] }}</h3>
+            <h3> english: {{ words[0] }}</h3>
             <p> maori: {{ words[1] }}</p>
             <p> <strong> level: </strong> {{ words[2] }}</p>
             <p> <strong> added by: </strong> {{ words[3] }}</p>
-            <img src="static/images//{{words[5] }}.jpg">
-            <li><a href="/new_word">Add Word</a></li>
+            <img src="static/images//{{words[5]}}.jpg">
         </div>
 
         {% endfor %}
+            <li><a href="/new_word">Add Word</a></li>
 </div>
 {% endblock %}
