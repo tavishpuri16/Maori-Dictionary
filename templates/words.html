@@ -2,7 +2,7 @@
 
 {%block tabheader%} Menu {% endblock %}
 
-{% block pageheading %} Menu {% endblock %}
+{% block pageheading %} TEST {% endblock %}
 
 {% block main %}
 <div id="words">
@@ -11,11 +11,11 @@
             <h3> english: {{ words[0] }}</h3>
             <p> maori: {{ words[1] }}</p>
             <p> <strong> level: </strong> {{ words[2] }}</p>
-            <p> <strong> added by: </strong> {{ words[3] }}</p>
+            <p> <strong> added by: </strong> {{ words[4] }}</p>
+            <p> <strong> definition: </strong> {{ words[3] }}</p>
             <img src="static/images//{{words[5]}}.jpg">
         </div>
 
         {% endfor %}
-            <li><a href="/new_word">Add Word</a></li>
 </div>
 {% endblock %}

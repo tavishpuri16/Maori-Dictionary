@@ -24,6 +24,12 @@ def create_connection(db_file):
 
     return None
 
+def user_id():
+   query = "SELECT 'fname' FROM users"
+   con = create_connection(DB_NAME)
+   cur = con.cursor()
+   cur.execute(query)
+   con.close()
 
 @app.route('/')
 def render_homepage():
@@ -126,39 +132,39 @@ def render_signup_page():
    # return render_template("edit.html", words = words_list, logged_in = is_logged_in())
 
 @app.route('/edit', methods = ['GET', 'POST'])
-#@app.route('/edit')
 def render_edit():
 
     if request.method == "GET":
         return render_template("edit.html", logged_in=is_logged_in())
 
     if request.method == "POST":
+        print(request.form)
 
      # .strip() ignores any leading or trailing spaces in the user input
-        english = request.form.get('english').strip().title()
-        maori = request.form.get('maori').strip().title() #title auto capitalises
-        definition = request.form.get('definition').strip().title()
-        level = request.form.get('level').strip().title()
-        added_by = request.form.get('added_by').strip().title()
+        english = request.form.get('english')
+        maori = request.form.get('maori') #title auto capitalises
+        definition = request.form.get('definition')
+        level = request.form.get('level')
+        added_by = request.form.get('added_by')
+        image = 'noimage'
         con = create_connection(DB_NAME)
+      #  userid = session['userid']
 
-        query = "INSERT INTO words(id,english, maori, definition, level, added_by) VALUES(NULL,?, ?, ?,?, ?)"
-
+        query = """INSERT INTO words(id, english, maori, definition, level, added_by, image) VALUES(NULL,?,?,?,?,?,?)"""
         cur = con.cursor()
-        try:
-            cur.execute(query) #the extra comma at the end makes it a tuple( takes words as opposed to characters)
-        except sqlite3.IntegrityError:
-            return redirect('signup?error=category+is+already+used') #doesn't let same category be added twice
+        cur.execute(query, (english, maori, definition, level, added_by, image, ))
+
         con.commit()
         con.close()
     return render_template("edit.html", logged_in = is_logged_in())
 
 
 
+
 @app.route('/dictionary')
 def render_dictionary():
     con = create_connection(DB_NAME)
-    query = "SELECT english, maori, level, user_id, image, id FROM words"
+    query = "SELECT english, maori, level, userid, image, id FROM words"
     cur = con.cursor()
     cur.execute(query)
     words_list = cur.fetchall()
@@ -178,7 +184,7 @@ def render_dictionary():
 def render_word_page(xword):
     con = create_connection(DB_NAME)
     cur = con.cursor()
-    cur.execute = "SELECT english, maori, level, definition, user_id, image, id FROM words WHERE english=?", ({xword},)
+    cur.execute ("SELECT english, maori, level, definition, userid, image, id FROM words WHERE english=?", (xword, ))
     user_data = cur.fetchall()
     con.commit()
     con.close()
