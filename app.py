@@ -11,9 +11,7 @@ bcrypt = Bcrypt(app)
 app.secret_key = "secret_key"
 
 
-# creates a connection to the database
-# inputs: database file
-# outputs: the connection to the db or none.
+
 #creating connection with SQ database
 def create_connection(db_file):
     try:
@@ -131,8 +129,8 @@ def render_signup_page():
 #     if words_list is empty - render addnewword
    # return render_template("edit.html", words = words_list, logged_in = is_logged_in())
 
-@app.route('/edit', methods = ['GET', 'POST'])
-def render_edit():
+@app.route('/add_word', methods = ['GET', 'POST'])
+def render_add_word():
 
     if request.method == "GET":
         return render_template("edit.html", logged_in=is_logged_in())
@@ -145,15 +143,16 @@ def render_edit():
         maori = request.form.get('maori') #title auto capitalises
         definition = request.form.get('definition')
         level = request.form.get('level')
-        added_by = request.form.get('added_by')
-        image = 'noimage'
+     #   added_by = request.form.get('added_by')
+        added_by = session['firstname']
+        image = 'noimage.png'
         timestamp = datetime.now()
         con = create_connection(DB_NAME)
-      #  userid = session['userid']
+        userid = session['userid']
 
-        query = """INSERT INTO words(id, english, maori, definition, level, added_by, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?)"""
+        query = """INSERT INTO words(id, english, maori, userid, definition, level, added_by, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?,?)"""
         cur = con.cursor()
-        cur.execute(query, (english, maori, definition, level, added_by, image, timestamp, ))
+        cur.execute(query, (english, maori, userid, definition, level, added_by, image, timestamp, ))
 
         con.commit()
         con.close()
@@ -165,7 +164,7 @@ def render_edit():
 @app.route('/dictionary')
 def render_dictionary():
     con = create_connection(DB_NAME)
-    query = "SELECT english, maori, level, userid, image, id FROM words"
+    query = "SELECT english FROM words"
     cur = con.cursor()
     cur.execute(query)
     words_list = cur.fetchall()
@@ -186,7 +185,7 @@ def render_word_page(xword):
     userid = session['userid']
     con = create_connection(DB_NAME)
     cur = con.cursor()
-    cur.execute ("SELECT english, maori, level, definition, userid, image, timestamp, id FROM words WHERE english=?", (xword, ))
+    cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id FROM words WHERE english=?", (xword, ))
     user_data = cur.fetchall()
     con.commit()
     con.close()
