@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, redirect
 import sqlite3
 from sqlite3 import Error
 from flask_bcrypt import Bcrypt
-import datetime
+from datetime import datetime
 
 DB_NAME = "maori_dictionary.db"
 
@@ -147,12 +147,13 @@ def render_edit():
         level = request.form.get('level')
         added_by = request.form.get('added_by')
         image = 'noimage'
+        timestamp = datetime.now()
         con = create_connection(DB_NAME)
       #  userid = session['userid']
 
-        query = """INSERT INTO words(id, english, maori, definition, level, added_by, image) VALUES(NULL,?,?,?,?,?,?)"""
+        query = """INSERT INTO words(id, english, maori, definition, level, added_by, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?)"""
         cur = con.cursor()
-        cur.execute(query, (english, maori, definition, level, added_by, image, ))
+        cur.execute(query, (english, maori, definition, level, added_by, image, timestamp, ))
 
         con.commit()
         con.close()
@@ -182,9 +183,10 @@ def render_dictionary():
 
 @app.route('/words/<xword>')
 def render_word_page(xword):
+    userid = session['userid']
     con = create_connection(DB_NAME)
     cur = con.cursor()
-    cur.execute ("SELECT english, maori, level, definition, userid, image, id FROM words WHERE english=?", (xword, ))
+    cur.execute ("SELECT english, maori, level, definition, userid, image, timestamp, id FROM words WHERE english=?", (xword, ))
     user_data = cur.fetchall()
     con.commit()
     con.close()
