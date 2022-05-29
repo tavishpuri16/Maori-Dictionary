@@ -154,7 +154,11 @@ def render_add_word():
 
         query = """INSERT INTO words(id, english, maori, userid, definition, level, added_by, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?,?)"""
         cur = con.cursor()
-        cur.execute(query, (english, maori, userid, definition, level, added_by, image, timestamp, ))
+        try:
+            cur.execute(query, (english, maori, userid, definition, level, added_by, image, timestamp)) #the extra comma at the end makes it a tuple( takes words as opposed to characters)
+        except sqlite3.IntegrityError:
+           return redirect('/dictionary?error=word+is+already+used') #doesn't let same word be added twice
+
 
         con.commit()
         con.close()
@@ -190,20 +194,38 @@ def render_dictionary():
 
     return render_template("dictionary.html", words= words_list, logged_in = is_logged_in())
 
-@app.route('/DeleteWord', methods = ['GET', 'POST'])
-def delete_word():
+@app.route('/DeleteConfirm', methods = ['GET', 'POST'])
+def delete_confirm():
+        delete_word = request.form.get("Delete_Word").strip().title()
+        return render_template("delete_confirm.html", words=delete_word )
+
+
+
+@app.route('/DeleteWord/<words>', methods = ['GET', 'POST'])
+def delete_word(words):
+
+
     if request.method =='POST':
         print(request.form)
         delete_word = request.form.get("Delete_Word").strip().title()
         print(delete_word)
         con = create_connection(DB_NAME)
         cur = con.cursor()
-        cur.execute("DELETE FROM words WHERE english=?", (delete_word, ))
+        cur.execute("DELETE FROM words WHERE english=?", (words, ))
         con.commit()
         con.close()
         return redirect ('/dictionary')
 
-
+    if request.method =='GET':
+        print(request.form)
+        delete_word = request.form.get("Delete_Word")
+        print(delete_word)
+        con = create_connection(DB_NAME)
+        cur = con.cursor()
+        cur.execute("DELETE FROM words WHERE english=?", (words, ))
+        con.commit()
+        con.close()
+        return redirect ('/dictionary')
 
 @app.route('/words/<xword>')
 def render_word_page(xword):
