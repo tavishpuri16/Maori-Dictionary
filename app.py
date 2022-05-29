@@ -170,7 +170,7 @@ def render_dictionary():
 @app.route('/DeleteConfirm', methods = ['GET', 'POST']) #code for delete confirmation
 def delete_confirm():
         delete_word = request.form.get("Delete_Word").lower() #gets the word to be deleted
-        return render_template("delete_confirm.html", words=delete_word )
+        return render_template("delete_confirm.html", words=delete_word)
 
 
 
