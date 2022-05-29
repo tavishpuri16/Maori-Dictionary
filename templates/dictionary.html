@@ -8,19 +8,6 @@
     {% endif %}
 </div>
 
-
-<form class = "myForm" method = "post">
-    {% if logged_in %}
-    <div class = "form_group">
-        <div class = "form_label" >which word to delete:</div>
-        <div class = "form_label" ><input id = "delete_word" name = "delete_word" type = "text" required></div>
-    </div>
-    <div class ="button_group">
-        <input type = "submit" value = "Delete">
-    </div>
-    {% endif %}
-</form>
-
 <div id = "words">
 {% for words in words %}
         <div class = "product-box">

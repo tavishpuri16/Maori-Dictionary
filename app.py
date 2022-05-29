@@ -23,32 +23,16 @@ def create_connection(db_file):
 
     return None
 
-def user_id():
-   query = "SELECT 'fname' FROM users"
-   con = create_connection(DB_NAME)
-   cur = con.cursor()
-   cur.execute(query)
-   con.close()
 
 @app.route('/')
 def render_homepage():
-    con = create_connection(DB_NAME)
-    query = "SELECT category, id FROM categories" #selects relevant info from the right table
-    cur = con.cursor()
-    cur.execute(query)
-    words_list = cur.fetchall()
-    con.close()
-    return render_template("home.html", logged_in=is_logged_in(), words=words_list) #displays the html
+    return render_template("home.html", logged_in=is_logged_in())  # displays the html
+
+
 
 @app.route('/teacher')
 def render_teacher():
-    con = create_connection(DB_NAME)
-    query = "SELECT category, id FROM categories"
-    cur = con.cursor()
-    cur.execute(query)
-    categories_list = cur.fetchall()
-    con.close()
-    return render_template("teacher.html", logged_in=is_logged_in(), category=categories_list)
+    return render_template("teacher.html", logged_in=is_logged_in())
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -119,17 +103,6 @@ def render_signup_page():
 
     return render_template('signup.html', logged_in=is_logged_in())
 
-#@app.route('/words')
-#def render_words(categoryid):
- #   con = create_connection(DB_NAME)
-  #  query = "SELECT english, maori, level, added_by, definition, image, id FROM words"
-   # cur = con.cursor()
-    #cur.execute(query)
-   # words_list = cur.fetchall()
-   # con.close()
-
-#     if words_list is empty - render addnewword
-   # return render_template("edit.html", words = words_list, logged_in = is_logged_in())
 
 @app.route('/add_word', methods = ['GET', 'POST'])
 def render_add_word():
@@ -141,12 +114,12 @@ def render_add_word():
         print(request.form)
 
      # .strip() ignores any leading or trailing spaces in the user input
-        english = request.form.get('english').strip().title()
-        maori = request.form.get('maori').strip().title() #title auto capitalises
-        definition = request.form.get('definition').strip().title()
+        english = request.form.get('english').strip().lower()
+        maori = request.form.get('maori').strip().lower() #title auto capitalises
+        definition = request.form.get('definition').strip().lower()
         level = request.form.get('level')
      #   added_by = request.form.get('added_by')
-        added_by = session['firstname'].strip().title()
+        added_by = session['firstname'].strip().lower()
         image = 'noimage.png'
         timestamp = datetime.now()
         con = create_connection(DB_NAME)
@@ -158,7 +131,6 @@ def render_add_word():
             cur.execute(query, (english, maori, userid, definition, level, added_by, image, timestamp)) #the extra comma at the end makes it a tuple( takes words as opposed to characters)
         except sqlite3.IntegrityError:
            return redirect('/dictionary?error=word+is+already+used') #doesn't let same word be added twice
-
 
         con.commit()
         con.close()
@@ -175,57 +147,28 @@ def render_dictionary():
     cur.execute(query)
     words_list = cur.fetchall()
     con.close()
-    if request.method =='POST':
-        print(request.form)
-        delete_word = request.form['delete_word'].strip().title()
-        print(delete_word)
-        con = create_connection(DB_NAME)
-        cur = con.cursor()
-        cur.execute("DELETE FROM words WHERE english=?", (delete_word, ))
-        con.commit()
-        con.close()
-        return redirect ('/dictionary')
 
-    if request.method =='POST':
-        print(request.form)
-
-        if request.form.get('DeleteWord') == 'Delete':
-            print ("Got it")
 
     return render_template("dictionary.html", words= words_list, logged_in = is_logged_in())
 
 @app.route('/DeleteConfirm', methods = ['GET', 'POST'])
 def delete_confirm():
-        delete_word = request.form.get("Delete_Word").strip().title()
+        delete_word = request.form.get("Delete_Word").strip().lower()
         return render_template("delete_confirm.html", words=delete_word )
 
 
 
 @app.route('/DeleteWord/<words>', methods = ['GET', 'POST'])
+
 def delete_word(words):
 
-
-    if request.method =='POST':
-        print(request.form)
-        delete_word = request.form.get("Delete_Word").strip().title()
-        print(delete_word)
-        con = create_connection(DB_NAME)
-        cur = con.cursor()
-        cur.execute("DELETE FROM words WHERE english=?", (words, ))
-        con.commit()
-        con.close()
-        return redirect ('/dictionary')
-
-    if request.method =='GET':
-        print(request.form)
-        delete_word = request.form.get("Delete_Word")
-        print(delete_word)
-        con = create_connection(DB_NAME)
-        cur = con.cursor()
-        cur.execute("DELETE FROM words WHERE english=?", (words, ))
-        con.commit()
-        con.close()
-        return redirect ('/dictionary')
+    print(request.form)
+    con = create_connection(DB_NAME)
+    cur = con.cursor()
+    cur.execute("DELETE FROM words WHERE english=?", (words, ))
+    con.commit()
+    con.close()
+    return redirect('/dictionary')
 
 @app.route('/words/<xword>')
 def render_word_page(xword):
@@ -240,42 +183,6 @@ def render_word_page(xword):
     con.close()
     print(user_data)
     return render_template('words.html', logged_in = is_logged_in(), words=user_data)
-
-
-
-#@app.route('/categories')
-#def render_categories():
- #   con = create_connection(DB_NAME)
-  #  query = "SELECT category, id FROM categories"
-   # cur = con.cursor()
-    #cur.execute(query)
- #   categories_list = cur.fetchall()
-  #  con.close()
-   # return render_template("categories.html", categories = categories_list, logged_in = is_logged_in())
-
-
-#adding option to add new categories
-#@app.route('/edit', methods =['GET','POST'])
-#def render_edit():
-
- #  if request.method == 'POST':
-
-
-     # .strip() ignores any leading or trailing spaces in the user input
-    #    word = request.form.get('english').strip().title() #title auto capitalises
-
-   #     con = create_connection(DB_NAME)
-
-    #    query = "INSERT INTO categories(id,category) VALUES(NULL,?)"
-
-     #   cur = con.cursor()
-      #  try:
-       #     cur.execute(query, (category,)) #the extra comma at the end makes it a tuple( takes words as opposed to characters)
-        #except sqlite3.IntegrityError:
-         #   return redirect('signup?error=category+is+already+used') #doesn't let same category be added twice
-        #con.commit()
-        #con.close()
-   # return render_template("edit.html", logged_in = is_logged_in())
 
 
 def is_logged_in():
