@@ -17,9 +17,9 @@
 
 		<nav>
             {% if logged_in %}
-                <a href="/logout">Log out</a>
+                <a href="/logout">Log out</a> <!-- logs out if clicking 'log out' -->
             {% else %}
-                <a href="/login">Log in</a>
+                <a href="/login">Log in</a> <!-- calls login function if login is clicked -->
             {% endif %}
             <input type="checkbox" name="drop_down_menu" />
 			<span></span>

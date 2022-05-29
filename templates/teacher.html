@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{%block heading%} Maori Dictionary {% endblock %}
 
-{%block tabheader%} Categories {% endblock %}
+
 {%block main%}
 
 <h2>please confirm if teacher or student</h2>
 
 <form class ="myform" method="post">
     <div class="button-group">
-    <a href="/">Student</a> or <a href = "/signup">Teacher</a>
+    <a href="/">Student</a> or <a href = "/signup">Teacher</a> <!-- calls signup function if teacher is clicked, goes back to home if student is clicked -->
     </div>
 </form>
 {%endblock %}

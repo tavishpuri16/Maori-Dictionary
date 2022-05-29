@@ -66,7 +66,7 @@ def login():
             return redirect('/signup?error=Password+must+be+8+characters+or+more') #if password is less than 8 characters
 
 #saves email, userid and firstname for the session
-        session['email'] = email #
+        session['email'] = email
         session['userid'] = userid
         session['firstname'] = firstname
         print(session)
@@ -103,7 +103,7 @@ def render_signup_page():
             cur.execute(query,(fname,lname,email,hashed_password)) #executes db query
         except sqlite3.IntegrityError:
             return redirect('signup?error=Email+is+already+used') #doesn't let same email sign up twice
-        con.commit()
+        con.commit() #saves all the changes made
         con.close()
         return redirect('/login') #redirects to login page once signed up
 
@@ -132,8 +132,8 @@ def render_add_word():
         if len(definition) > 200: #doesn't allow the definition to be longer than 200 characters
             return redirect('/dictionary?error=definition+must+be+less+than+30+characters')
         level = request.form.get('level')
-        if len(level) > 99: #doesn't allow the year level to be greater than 2 digits
-            return redirect('/dictionary?error=year+must+be+less+than+3+digits')
+        if len(level) > 13: #doesn't allow the year level to be greater than year 13
+            return redirect('/dictionary?error=year+level+must+be+less+than+13')
 
         added_by = session['firstname'].strip().lower() #shows who the word was added by
         image = 'noimage.png' #automatically uses noimage.png for every added image
@@ -193,7 +193,7 @@ def render_word_page(xword): #xword is the word that is being clicked on
         userid = session['userid']
     con = create_connection(DB_NAME)
     cur = con.cursor()
-    cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id FROM words WHERE english=?", (xword, )) #executes query
+    cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id FROM words WHERE english=?", (xword, )) #executes query and passes the word being clicked on
     user_data = cur.fetchall()
     con.commit()
     con.close()

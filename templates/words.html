@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{%block heading%} Maori Dictionary {% endblock %} <!-- Title -->
+
 {%block tabheader%} Menu {% endblock %}
 
 {% block pageheading %} Menu {% endblock %}
@@ -8,6 +10,7 @@
 <div id="words">
 {% for words in words %}
         <div class = "product-box">
+            <!-- each of the following fields will show the designated data from the query under each heading based on their position in the query -->
             <h2>  {{ words[0] }}</h2>
             <p> <strong> maori: </strong> {{ words[1] }}</p>
             <p> <strong> level: </strong> {{ words[2] }}</p>

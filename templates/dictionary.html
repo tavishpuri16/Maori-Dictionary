@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
+{%block heading%} Maori Dictionary {% endblock %}
+
 {% block main %}
 <div class = "button-group">
     {% if logged_in %}
-    <a href = "/add_word"> Add new words</a>
-    {% else %} <a href = "/login"> log in first</a>
+    <a  href = "/add_word"><strong> Add new words</strong></a> <!-- references add_word route when 'add new words' is clicked -->
+    {% else %} <a href = "/login"> <strong>log in if you're a teacher to add/delete words</strong> </a> <!-- redirects to login -->
     {% endif %}
 </div>
 
