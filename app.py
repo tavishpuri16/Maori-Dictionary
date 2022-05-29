@@ -124,16 +124,16 @@ def render_add_word():
      # .strip() ignores any leading or trailing spaces in the user input
         english = request.form.get('english').strip().lower()
         if len(english) > 30: #doesn't allow the word to be longer than 30 characters
-            return redirect('/dictionary?error=word+must+be+less+than+30+characters')
+            return redirect('/add_word?error=word+must+be+less+than+30+characters')
         maori = request.form.get('maori').strip().lower() #title auto capitalises
         if len(maori) > 30: #doesn't allow the word to be longer than 30 characters
-            return redirect('/dictionary?error=word+must+be+less+than+30+characters')
+            return redirect('/add_word?error=word+must+be+less+than+30+characters')
         definition = request.form.get('definition').strip().lower()
         if len(definition) > 200: #doesn't allow the definition to be longer than 200 characters
-            return redirect('/dictionary?error=definition+must+be+less+than+30+characters')
+            return redirect('/add_word?error=definition+must+be+less+than+30+characters')
         level = request.form.get('level')
         if len(level) > 13: #doesn't allow the year level to be greater than year 13
-            return redirect('/dictionary?error=year+level+must+be+less+than+13')
+            return redirect('/add_word?error=year+level+must+be+less+than+13')
 
         added_by = session['firstname'].strip().lower() #shows who the word was added by
         image = 'noimage.png' #automatically uses noimage.png for every added image
@@ -147,10 +147,11 @@ def render_add_word():
         try:
             cur.execute(query, (english, maori, userid, definition, level, added_by, image, timestamp)) # the commas make the fields a tuple(takes words as opposed to characters)
         except sqlite3.IntegrityError:
-           return redirect('/dictionary?error=word+is+already+used') #doesn't let same word be added twice
+           return redirect('/add_word?error=word+is+already+used') #doesn't let same word be added twice
 
         con.commit()
         con.close()
+    return redirect('/dictionary')
     return render_template("edit.html", logged_in = is_logged_in())
 
 
