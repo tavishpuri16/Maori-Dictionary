@@ -8,11 +8,12 @@
     {% endif %}
 </div>
 
+
 <form class = "myForm" method = "post">
     {% if logged_in %}
     <div class = "form_group">
         <div class = "form_label" >which word to delete:</div>
-        <div class = "form_label" ><input id = "delete_word" name = "delete-word" type = "text" required></div>
+        <div class = "form_label" ><input id = "delete_word" name = "delete_word" type = "text" required></div>
     </div>
     <div class ="button_group">
         <input type = "submit" value = "Delete">
@@ -23,8 +24,15 @@
 <div id = "words">
 {% for words in words %}
         <div class = "product-box">
-         <ul><a href = "/words/{{words[0] }}"> {{words [0]}}</a></ul>
-
+            <ul><a href = "/words/{{words[0] }}"> {{words [0]}}</a> </ul>
+       <!--   <div class ="button_group">
+          <input type = "submit"  value = "Delete" name= "DeleteWord"/>
+--><form method="post" action="DeleteWord">
+   <!--     <input type="hidden" value={{words[0]}} name="DeleteWord">
+        <input type="submit" value="Delete" name= {{words[0]}}/>
+-->
+             <button type="submit" name="Delete_Word" value= {{words[0]}}>Delete</button>
+    </form>
         </div>
 
         {% endfor %}
@@ -33,3 +41,4 @@
 </div>
 {% endblock %}
 
+</div>

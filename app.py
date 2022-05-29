@@ -4,6 +4,7 @@ from sqlite3 import Error
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 
+
 DB_NAME = "maori_dictionary.db"
 
 app = Flask(__name__)
@@ -35,9 +36,9 @@ def render_homepage():
     query = "SELECT category, id FROM categories" #selects relevant info from the right table
     cur = con.cursor()
     cur.execute(query)
-    categories_list = cur.fetchall()
+    words_list = cur.fetchall()
     con.close()
-    return render_template("home.html", logged_in=is_logged_in(), categories=categories_list) #displays the html
+    return render_template("home.html", logged_in=is_logged_in(), words=words_list) #displays the html
 
 @app.route('/teacher')
 def render_teacher():
@@ -81,6 +82,7 @@ def login():
         print(session)
         return redirect('/')
     return render_template('login.html')
+
 
 
 @app.route('/signup', methods =['GET','POST'])
@@ -139,12 +141,12 @@ def render_add_word():
         print(request.form)
 
      # .strip() ignores any leading or trailing spaces in the user input
-        english = request.form.get('english')
-        maori = request.form.get('maori') #title auto capitalises
-        definition = request.form.get('definition')
+        english = request.form.get('english').strip().title()
+        maori = request.form.get('maori').strip().title() #title auto capitalises
+        definition = request.form.get('definition').strip().title()
         level = request.form.get('level')
      #   added_by = request.form.get('added_by')
-        added_by = session['firstname']
+        added_by = session['firstname'].strip().title()
         image = 'noimage.png'
         timestamp = datetime.now()
         con = create_connection(DB_NAME)
@@ -161,7 +163,7 @@ def render_add_word():
 
 
 
-@app.route('/dictionary')
+@app.route('/dictionary', methods = ['GET', 'POST'])
 def render_dictionary():
     con = create_connection(DB_NAME)
     query = "SELECT english FROM words"
@@ -171,18 +173,43 @@ def render_dictionary():
     con.close()
     if request.method =='POST':
         print(request.form)
-        delete_word = request.form['delete_word'].strip().lower()
+        delete_word = request.form['delete_word'].strip().title()
         print(delete_word)
         con = create_connection(DB_NAME)
         cur = con.cursor()
         cur.execute("DELETE FROM words WHERE english=?", (delete_word, ))
         con.commit()
         con.close()
-    return render_template("dictionary.html", words= words_list, logged_in =is_logged_in())
+        return redirect ('/dictionary')
+
+    if request.method =='POST':
+        print(request.form)
+
+        if request.form.get('DeleteWord') == 'Delete':
+            print ("Got it")
+
+    return render_template("dictionary.html", words= words_list, logged_in = is_logged_in())
+
+@app.route('/DeleteWord', methods = ['GET', 'POST'])
+def delete_word():
+    if request.method =='POST':
+        print(request.form)
+        delete_word = request.form.get("Delete_Word").strip().title()
+        print(delete_word)
+        con = create_connection(DB_NAME)
+        cur = con.cursor()
+        cur.execute("DELETE FROM words WHERE english=?", (delete_word, ))
+        con.commit()
+        con.close()
+        return redirect ('/dictionary')
+
+
 
 @app.route('/words/<xword>')
 def render_word_page(xword):
-    userid = session['userid']
+
+    if is_logged_in():
+        userid = session['userid']
     con = create_connection(DB_NAME)
     cur = con.cursor()
     cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id FROM words WHERE english=?", (xword, ))
