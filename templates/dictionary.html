@@ -11,10 +11,10 @@
 <div id = "words">
 {% for words in words %}
         <div class = "product-box">
-            <ul><a href = "/words/{{words[0] }}"> {{words [0]}}</a> </ul>
+            <ul><a href = "/words/{{words[0]}}"> {{words[0]}}</a> </ul>
       <form method="post" action="DeleteConfirm">
 
-             <button type="submit" name="Delete_Word" value= {{words[0]}}>Delete</button>
+             <button type="submit" name="Delete_Word" value= "{{words[0]}}">Delete</button>
     </form>
 
         {% endfor %}
