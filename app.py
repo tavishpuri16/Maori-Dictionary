@@ -143,10 +143,9 @@ def render_add_word():
         if len(definition) > 200: #doesn't allow the definition to be longer than 200 characters
             return redirect('/add_word?error=definition+must+be+less+than+30+characters')
         level = request.form.get('level')
-        if len(level) > 99: #doesn't allow the year level to be greater than 2 digits
+        if len(level) > 2: #doesn't allow the year level to be greater than 2 digits
             return redirect('/add_word?error=year+level+must+be+less+than+3+digits')
 
-   #     added_by = session['firstname'].strip().lower() #shows who the word was added by
         image = 'noimage.png' #automatically uses noimage.png for every added image
         timestamp = datetime.now().strftime('%d-%m-%Y') #gets the current date of when the word was added
         con = create_connection(DB_NAME)
