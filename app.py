@@ -153,7 +153,7 @@ def render_add_word():
         userid = session['userid'] #extracts the session userid
 
         #inserts the user inputs into the words table
-        query = """INSERT INTO words(id, english, maori, userid, definition, level, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?,?)"""
+        query = """INSERT INTO words(id, english, maori, userid, definition, level, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?)"""
         cur = con.cursor()
         try:
             cur.execute(query, (english, maori, userid, definition, level, image, timestamp)) # the commas make the fields a tuple(takes words as opposed to characters)
