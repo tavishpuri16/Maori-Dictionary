@@ -204,10 +204,10 @@ def render_word_page(xword): #xword is the word that is being clicked on
         userid = session['userid']
     con = create_connection(DB_NAME)
     cur = con.cursor()
-    cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id, userid FROM words WHERE english=?", (xword, )) #executes query and passes the word being clicked on
+    cur.execute ("SELECT english, maori, level, definition, image, timestamp, id, userid FROM words WHERE english=?", (xword, )) #executes query and passes the word being clicked on
     word_data = cur.fetchall()
     print(word_data)
-    cur.execute("SELECT fname FROM users WHERE id=?", (word_data[0][8],))
+    cur.execute("SELECT fname FROM users WHERE id=?", (word_data[0][7],))
     user_data = cur.fetchall()
     con.commit()
     con.close()
