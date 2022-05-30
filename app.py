@@ -170,7 +170,7 @@ def render_add_word():
 @app.route('/dictionary', methods = ['GET', 'POST'])
 def render_dictionary():
     con = create_connection(DB_NAME)
-    query = "SELECT english FROM words ORDER BY id" #initially displays all the words in english, and sorts them by id so that newly added words are shown at the bottom
+    query = "SELECT english, maori, image FROM words ORDER BY id" #initially displays all the words in english, and sorts them by id so that newly added words are shown at the bottom
     cur = con.cursor()
     cur.execute(query)
     words_list = cur.fetchall()

@@ -13,7 +13,8 @@
 <div id = "words">
 {% for words in words %}
         <div class = "product-box">
-            <ul><a href = "/words/{{words[0]}}"> {{words[0]}}</a> </ul> <!-- if a word is clicked, call the function 'words' and pass the clicked word as a parameter -->
+            <ul><a href = "/words/{{words[0]}}"> {{words[0]}}  -  {{words[1]}}</a> </ul> <!-- if a word is clicked, call the function 'words' and pass the clicked word as a parameter -->
+           <img class = "imgthumb" src= "/static/images/{{words[2] }}">
       <form method="post" action="DeleteConfirm"> <!-- create a form with a submit button such that when the button is clicked, the function DeleteConfirm is called -->
 
              <button type="submit" name="Delete_Word" value= "{{words[0]}}">Delete</button> <!-- name the form as Delete_Word, with the value being the word to be deleted -->

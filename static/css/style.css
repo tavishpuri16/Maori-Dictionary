@@ -92,8 +92,8 @@ th {
     color: #fff;
 }
 
-img .thumb {
-    max-width: 90px;
+.imgthumb {
+    width: 13%;
 }
 footer {
     grid-area: footer;
