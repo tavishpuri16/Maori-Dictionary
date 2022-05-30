@@ -25,6 +25,17 @@ def create_connection(db_file):
 
     return None
 
+#code for getting users info
+def user_info():
+    query = "SELECT * FROM users" #selects all data from users
+    con = create_connection(DB_NAME) #function call to create connection with database
+    cur = con.cursor() #retrieves data after the select statement
+    cur.execute(query) #executes the query, and email is passed
+    user_data = cur.fetchall #gets all the information for the specific user
+    con.commit() #commits any changes made
+    con.close() #closes connection
+    return user_data
+
 #maps URL to specific function, in this case home page
 @app.route('/')
 def render_homepage(): #creates function
@@ -132,20 +143,20 @@ def render_add_word():
         if len(definition) > 200: #doesn't allow the definition to be longer than 200 characters
             return redirect('/add_word?error=definition+must+be+less+than+30+characters')
         level = request.form.get('level')
-        if len(level) > 13: #doesn't allow the year level to be greater than year 13
-            return redirect('/add_word?error=year+level+must+be+less+than+13')
+        if len(level) > 99: #doesn't allow the year level to be greater than 2 digits
+            return redirect('/add_word?error=year+level+must+be+less+than+3+digits')
 
-        added_by = session['firstname'].strip().lower() #shows who the word was added by
+   #     added_by = session['firstname'].strip().lower() #shows who the word was added by
         image = 'noimage.png' #automatically uses noimage.png for every added image
-        timestamp = datetime.now() #gets the current date and time of when the word was added
+        timestamp = datetime.now().strftime('%d-%m-%Y') #gets the current date of when the word was added
         con = create_connection(DB_NAME)
         userid = session['userid'] #extracts the session userid
 
         #inserts the user inputs into the words table
-        query = """INSERT INTO words(id, english, maori, userid, definition, level, added_by, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?,?)"""
+        query = """INSERT INTO words(id, english, maori, userid, definition, level, image, timestamp) VALUES(NULL,?,?,?,?,?,?,?,?)"""
         cur = con.cursor()
         try:
-            cur.execute(query, (english, maori, userid, definition, level, added_by, image, timestamp)) # the commas make the fields a tuple(takes words as opposed to characters)
+            cur.execute(query, (english, maori, userid, definition, level, image, timestamp)) # the commas make the fields a tuple(takes words as opposed to characters)
         except sqlite3.IntegrityError:
            return redirect('/add_word?error=word+is+already+used') #doesn't let same word be added twice
 
@@ -194,12 +205,15 @@ def render_word_page(xword): #xword is the word that is being clicked on
         userid = session['userid']
     con = create_connection(DB_NAME)
     cur = con.cursor()
-    cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id FROM words WHERE english=?", (xword, )) #executes query and passes the word being clicked on
+    cur.execute ("SELECT english, maori, level, definition, added_by, image, timestamp, id, userid FROM words WHERE english=?", (xword, )) #executes query and passes the word being clicked on
+    word_data = cur.fetchall()
+    print(word_data)
+    cur.execute("SELECT fname FROM users WHERE id=?", (word_data[0][8],))
     user_data = cur.fetchall()
     con.commit()
     con.close()
     print(user_data)
-    return render_template('words.html', logged_in = is_logged_in(), words=user_data)
+    return render_template('words.html', logged_in = is_logged_in(), words=word_data, users=user_data)
 
 #function to check if user is logged in
 def is_logged_in():
