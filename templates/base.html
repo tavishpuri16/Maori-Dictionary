@@ -1,61 +1,59 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Suez+One&display=swap" rel="stylesheet">
-	<title>{% block title %}{% endblock %}</title>
-	<meta name="Description" content="Author: T Puri, Content: A dictionary to convert maori words to english.">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Suez+One&display=swap" rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="Description" content="Author: T Puri, Content: A dictionary to convert maori words to english.">
 </head>
 
 <body>
-	<div id="container">
+<div id="container">
 
-		<header>
-			<h1>{% block heading %}{% endblock %}</h1>
-		</header>
-{% if logged_in %}
+    <header>
+        <h1>{% block heading %}{% endblock %}</h1>
+    </header>
+    {% if logged_in %}
     <strong>Hello, {{ session.firstname }}</strong>
-{% endif %}
+    {% endif %}
 
-		<nav>
-            {% if logged_in %}
-                <a href="/logout">Log out</a> <!-- logs out if clicking 'log out' -->
-            {% else %}
-                <a href="/login">Log in</a> <!-- calls login function if login is clicked -->
-            {% endif %}
-            <input type="checkbox" name="drop_down_menu" />
-			<span></span>
-			<span></span>
-			<span></span>
-			<ul>
-                <li><a href="\">Home</a></li>
-				<li><a href="\dictionary">Dictionary</a></li> <!-- calls dictionary function if dictionary is clicked -->
+    <nav>
+        {% if logged_in %}
+        <a href="/logout">Log out</a> <!-- logs out if clicking 'log out' -->
+        {% else %}
+        <a href="/login">Log in</a> <!-- calls login function if login is clicked -->
+        {% endif %}
+        <input type="checkbox" name="drop_down_menu"/>
+        <span></span>
+        <span></span>
+        <span></span>
+        <ul>
+            <li><a href="\">Home</a></li>
+            <li><a href="\dictionary">Dictionary</a></li> <!-- calls dictionary function if dictionary is clicked -->
 
-			</ul>
-		</nav>
-
-
-		<!--
-		=====================================================
-		== Content row of the template.                 ==
-		=====================================================
-		-->
-
-		<main>
-            {% block main%}{% endblock %}
-        </main>
+        </ul>
+    </nav>
 
 
+    <!--
+    =====================================================
+    == Content row of the template.                 ==
+    =====================================================
+    -->
+
+    <main>
+        {% block main%}{% endblock %}
+    </main>
 
 
-		<footer>
-			<p>
-				&copy; Tavish's Maori Dictionary 2022
-			</p>
-		</footer>
+    <footer>
+        <p>
+            &copy; Tavish's Maori Dictionary 2022
+        </p>
+    </footer>
 
-	</div>
+</div>
 </body>
 </html>
 

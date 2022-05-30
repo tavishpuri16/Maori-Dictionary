@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-{%block heading%}<a  href = "/"><strong> Maori Dictionary</strong></a> {% endblock %}
+{%block heading%}<a href="/"><strong> Maori Dictionary</strong></a> {% endblock %}
 
 
 {%block main%}
 
 <h2>please confirm if teacher or student</h2>
 
-<form class ="myform" method="post">
+<form class="myform" method="post">
     <div class="button-group">
-    <a href="/">Student</a> or <a href = "/signup">Teacher</a> <!-- calls signup function if teacher is clicked, goes back to home if student is clicked -->
+        <a href="/">Student</a> or <a href="/signup">Teacher</a>
+        <!-- calls signup function if teacher is clicked, goes back to home if student is clicked -->
     </div>
 </form>
 {%endblock %}

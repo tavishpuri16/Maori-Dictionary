@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{%block heading%}<a  href = "/"><strong> Maori Dictionary</strong></a> {% endblock %}
+{%block heading%}<a href="/"><strong> Maori Dictionary</strong></a> {% endblock %}
 
 {%block main%}
 
 <h2>are you sure you want to delete this word?</h2> <!-- confirmation message -->
 
-<form class ="myform" method="post">
+<form class="myform" method="post">
     <div class="button-group">
-    <a href="/DeleteWord/{{words}}">Yes</a> or <a href = "/dictionary">No</a> <!-- if yes is clicked, call function delete word, passing the current word as a parameter.
+        <a href="/DeleteWord/{{words}}">Yes</a> or <a href="/dictionary">No</a> <!-- if yes is clicked, call function delete word, passing the current word as a parameter.
     If no is clicked go back to dictionary -->
     </div>
 </form>

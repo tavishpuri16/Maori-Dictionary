@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%block heading%}<a  href = "/"><strong> Maori Dictionary</strong></a> {% endblock %}
+{%block heading%}<a href="/"><strong> Maori Dictionary</strong></a> {% endblock %}
 
 {%block tabheader%} Menu {% endblock %}
 
@@ -8,20 +8,20 @@
 
 {% block main %}
 <div id="words">
-{% for words in words %}
-        <div class = "product-box">
-            <!-- each of the following fields will show the designated data from the query under each heading based on their position in the query -->
-            <h2>  {{ words[0] }}</h2>
-            <p> <strong> maori: </strong> {{ words[1] }}</p>
-            <p> <strong> level: </strong> {{ words[2] }}</p>
-            <p> <strong> definition: </strong> {{ words[3] }}</p>
-            <p> <strong> added on: </strong> {{ words[5] }}</p>
-            <p> <strong> added by: </strong> {{ users[0][0] }}</p> <!-- shows who added the word -->
-            <img src= "/static/images/{{words[4] }}"> <!-- image source -->
+    {% for words in words %}
+    <div class="product-box">
+        <!-- each of the following fields will show the designated data from the query under each heading based on their position in the query -->
+        <h2> {{ words[0] }}</h2>
+        <p><strong> maori: </strong> {{ words[1] }}</p>
+        <p><strong> level: </strong> {{ words[2] }}</p>
+        <p><strong> definition: </strong> {{ words[3] }}</p>
+        <p><strong> added on: </strong> {{ words[5] }}</p>
+        <p><strong> added by: </strong> {{ users[0][0] }}</p> <!-- shows who added the word -->
+        <img src="/static/images/{{words[4] }}"> <!-- image source -->
 
 
-        </div>
+    </div>
 
-        {% endfor %}
+    {% endfor %}
 </div>
 {% endblock %}
